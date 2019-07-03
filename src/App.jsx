@@ -20,6 +20,25 @@ class App extends Component {
                 }
               ]
     };
+
+  }
+
+
+  receiveNewMessage = (msg) => {
+    // handles message received from chatbar
+
+    const getRandomID = function () {
+      // from https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+      return(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5));
+    };
+
+    const newMsg = {
+                  id: getRandomID(),
+                  username: (msg.user === "") ? "Anonymous" : msg.user,
+                  content: msg.content
+                  };
+    const updateMsg = this.state.messages.concat(newMsg);
+    this.setState({messages: updateMsg});
   }
 
   componentDidMount() {
@@ -47,7 +66,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser} />
+        <ChatBar currentUser={this.state.currentUser} receiveNewMessage={this.receiveNewMessage}/>
       </div>
     );
   }
