@@ -6,12 +6,11 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      currentUser: {name: "Bob"}, // If currentUser is not defined, will be Anonymous
+      currentUser: {name: ""}, // If currentUser is not defined, will be Anonymous
       messages:[] //messages from server will be stored here as they arrive
     };
 
   }
-
 
   receiveNewMessage = (msg) => {
     // create the message object and upate the list
@@ -30,6 +29,12 @@ class App extends Component {
 
   }
 
+  updateUser = (user) => {
+    // update user from chatbar
+    this.setState(
+       {currentUser: user}
+    );
+  }
 
   componentDidMount() {
 
@@ -76,7 +81,11 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser} receiveNewMessage={this.receiveNewMessage}/>
+        <ChatBar
+          currentUser={this.state.currentUser}
+          receiveNewMessage={this.receiveNewMessage}
+          updateUser={this.updateUser}
+        />
       </div>
     );
   }
