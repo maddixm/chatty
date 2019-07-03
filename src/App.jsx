@@ -32,13 +32,22 @@ class App extends Component {
       return(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5));
     };
 
+    // create the message object and upate the list
     const newMsg = {
                   id: getRandomID(),
                   username: (msg.user === "") ? "Anonymous" : msg.user,
                   content: msg.content
                   };
-    const updateMsg = this.state.messages.concat(newMsg);
-    this.setState({messages: updateMsg});
+    // const updateMsg = this.state.messages.concat(newMsg);
+    // this.setState({messages: updateMsg});
+
+    // send a copy of the message to the server
+    this.socket.send(JSON.stringify(
+      {username: newMsg.username,
+       content: newMsg.content}
+      )
+    );
+
   }
 
   componentDidMount() {
@@ -56,8 +65,15 @@ class App extends Component {
       // Calling setState will trigger a call to render() in App and all child components.
       this.setState({messages: messages});
     }, 3000);
-  }
 
+    // create and open the websocket
+    this.socket = new WebSocket('ws://localhost:3001'); //ws b/c http
+    this.socket.onopen = () => {
+      this.setState({closed: false});
+      console.log("We're connected.");
+    };
+
+  }
 
   render() {
     return (
