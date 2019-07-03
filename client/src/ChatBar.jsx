@@ -5,9 +5,16 @@ export default class ChatBar extends Component {
     super();
   }
 
+  checkUserBlur = (event) => {
+    this.props.updateUser({name: this.refs.form.chatuser.value});
+  }
+
   handleChangeUser = (event) => {
     // send user info to App.jsx
-    this.props.updateUser({name: this.refs.form.chatuser.value});
+    console.log(event);
+    if(event.key === "Enter") {
+      this.props.updateUser({name: this.refs.form.chatuser.value});
+    }
   }
 
   checkChatBarEnter = (event) => {
@@ -31,7 +38,7 @@ export default class ChatBar extends Component {
               ref={this.props.inputRef}
               placeholder="Your Name (Optional)"
               defaultValue={this.props.currentUser.name}
-              onChange={this.handleChangeUser}
+              onBlur={this.checkUserBlur}
             />
             <input name="chatmessage" className="chatbar-message"
               ref={this.props.inputRef}

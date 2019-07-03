@@ -22,8 +22,10 @@ class App extends Component {
 
     // send a copy of the message to the server (must be string)
     this.socket.send(JSON.stringify(
-      {username: newMsg.username,
-       content: newMsg.content}
+        {username: newMsg.username,
+         content: newMsg.content,
+         type: "postMessage"
+        }
       )
     );
 
@@ -34,6 +36,15 @@ class App extends Component {
     this.setState(
        {currentUser: user}
     );
+
+    // send a notification to the server
+    this.socket.send(JSON.stringify(
+        {user,
+         type: "postNotification"
+        }
+      )
+    );
+
   }
 
   componentDidMount() {
