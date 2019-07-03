@@ -3,5 +3,6 @@
   "browser": true,
   /*"esnext": true,*/
   "newcap": false,
-  "esversion": 6
+  "esversion": 6,
+  "moz": true
 }
