@@ -41,7 +41,7 @@ class App extends Component {
     // const updateMsg = this.state.messages.concat(newMsg);
     // this.setState({messages: updateMsg});
 
-    // send a copy of the message to the server
+    // send a copy of the message to the server (must be string)
     this.socket.send(JSON.stringify(
       {username: newMsg.username,
        content: newMsg.content}
