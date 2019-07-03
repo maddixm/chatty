@@ -14,21 +14,12 @@ class App extends Component {
 
 
   receiveNewMessage = (msg) => {
-    // handles message received from chatbar
-
-    const getRandomID = function () {
-      // from https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
-      return(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5));
-    };
-
     // create the message object and upate the list
     const newMsg = {
-                  id: getRandomID(),
+                  id: msg.id,
                   username: (msg.user === "") ? "Anonymous" : msg.user,
                   content: msg.content
                   };
-    // const updateMsg = this.state.messages.concat(newMsg);
-    // this.setState({messages: updateMsg});
 
     // send a copy of the message to the server (must be string)
     this.socket.send(JSON.stringify(
@@ -39,8 +30,9 @@ class App extends Component {
 
   }
 
+
   componentDidMount() {
-    console.log("componentDidMount <App />");
+
     setTimeout(() => {
       console.log("Simulating incoming message");
       // Add a new message to the list of messages in the data store
@@ -55,13 +47,26 @@ class App extends Component {
       this.setState({messages: messages});
     }, 3000);
 
+    const updateMessageState = (msg) => {
+      // add a new message to the state
+      const updateMsg = this.state.messages.concat(msg);
+      this.setState({messages: updateMsg});
+    };
+
     // create and open the websocket
     this.socket = new WebSocket('ws://localhost:3001'); //ws b/c http
+    // this.socket.addEventListener('message', this.gotMsg);
     this.socket.onopen = () => {
       this.setState({closed: false});
       console.log("We're connected.");
-    };
 
+      // process broadcast messages
+      this.socket.onmessage = function incoming(e) {
+        const msg = JSON.parse(e.data);
+        console.log(`${msg.id} User ${msg.username} said ${msg.content}`);
+        updateMessageState(msg); // updates browser
+      };
+    };
   }
 
   render() {
