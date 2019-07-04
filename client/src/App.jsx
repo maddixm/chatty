@@ -1,19 +1,24 @@
 import React, {Component} from 'react';
 import ChatBar from "./ChatBar.jsx";
 import MessageList from "./MessageList.jsx";
+import NotifyList from "./NotifyList.jsx";
 
 class App extends Component {
+
   constructor() {
+
     super();
     this.state = {
       currentUser: {name: ""}, // If currentUser is not defined, will be Anonymous
-      messages:[] //messages from server will be stored here as they arrive
+      messages:[], //messages from users
+      notifications:[] //server notifications
     };
 
   }
 
   receiveNewMessage = (msg) => {
-    // create the message object and upate the list
+
+    // create the message object and upate the message list
     const newMsg = {
                   id: msg.id,
                   username: (msg.user === "") ? "Anonymous" : msg.user,
@@ -32,6 +37,7 @@ class App extends Component {
   }
 
   updateUser = (user) => {
+
     // update user from chatbar
     this.setState(
        {currentUser: user}
@@ -64,25 +70,45 @@ class App extends Component {
     }, 3000);
 
     const updateMessageState = (msg) => {
+
       // add a new message to the state
       const updateMsg = this.state.messages.concat(msg);
       this.setState({messages: updateMsg});
+
+    };
+
+    const updateNotificationState = (msg) => {
+
+      // add a new notification to the state
+      const updateNotify = this.state.notifications.concat(msg);
+      this.setState({notifications: updateNotify});
+
     };
 
     // create and open the websocket
     this.socket = new WebSocket('ws://localhost:3001'); //ws b/c http
-    // this.socket.addEventListener('message', this.gotMsg);
+
     this.socket.onopen = () => {
+
       this.setState({closed: false});
       console.log("We're connected.");
 
       // process broadcast messages
       this.socket.onmessage = function incoming(e) {
         const msg = JSON.parse(e.data);
-        console.log(`${msg.id} User ${msg.username} said ${msg.content}`);
-        updateMessageState(msg); // updates browser
+
+        if (msg.type === "incomingMessage") {
+          // console.log(`${msg.id} User ${msg.username} said ${msg.content}`);
+          updateMessageState(msg); // updates browser
+        } else if (msg.type === "incomingNotification") {
+          // console.log("changed",msg.user.prevname, msg.user.name);
+          updateNotificationState(msg);
+        }
+
       };
+
     };
+
   }
 
   render() {
@@ -92,6 +118,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages} />
+        <NotifyList notifications={this.state.notifications} />
         <ChatBar
           currentUser={this.state.currentUser}
           receiveNewMessage={this.receiveNewMessage}

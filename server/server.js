@@ -25,22 +25,31 @@ wss.on('connection', (ws) => {
 
   //display any received messages in the console
   ws.on('message', function incoming(Data) {
-    const parseData = JSON.parse(Data);
+    const msg = JSON.parse(Data);
+    msg.id = uuidv1(); // set unique id
 
-    if(parseData.type === "postMessage") {
-      const msg = parseData;
-      msg.id = uuidv1(); // set unique id
-      msg.type = "incomingMessage"; // msg is now incoming to server
-      console.log(`${msg.id} User ${msg.username} said ${msg.content} ${msg.type}`);
+    const sendMsg = (msg) => {
 
-      // broadcast the message to connected clients
+      // broadcast a message to all connected clients
       wss.clients.forEach(function each(client) {
         if (client.readyState === 1) { // 1 means socket is open
           client.send(JSON.stringify(msg));
         }
       });
-    } else if (parseData.type === "postNotification") {
-      console.log("notified", parseData.user);
+
+    };
+
+    if(msg.type === "postMessage") {
+      // chat messages
+      msg.type = "incomingMessage";
+      console.log(`${msg.id} User ${msg.username} said ${msg.content} ${msg.type}`);
+      sendMsg(msg);
+
+    } else if (msg.type === "postNotification") {
+      // username changes
+      msg.type = "incomingNotification";
+      sendMsg(msg);
+
     }
 
   });

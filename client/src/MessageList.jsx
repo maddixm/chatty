@@ -1,19 +1,11 @@
 import React, { Component } from "react";
 import Message from "./Message.jsx";
+import NotifyList from "./NotifyList.jsx";
 
-function MessageSystem(props) {
-  return(
-    <div className="message system">
-      Anonymous1 changed their name to nomnom.
-    </div>
-  );
-}
-
-export default class MessageList extends Component {
+class MessageList extends Component {
   constructor() {
     super();
   }
-
 
   render() {
 
@@ -29,9 +21,11 @@ export default class MessageList extends Component {
     return(
       <main className="messages">
         {messageArr}
-        <MessageSystem />
+        <NotifyList />
       </main>
     );
   }
 
 }
+
+export default MessageList
