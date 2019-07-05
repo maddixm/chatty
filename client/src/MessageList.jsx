@@ -41,5 +41,3 @@ class MessageList extends Component {
 }
 
 export default MessageList
-
-//you are trying to sort out the message notifications here

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import ChatBar from "./ChatBar.jsx";
 import MessageList from "./MessageList.jsx";
-// import NotifyList from "./NotifyList.jsx";
 
 class App extends Component {
 
@@ -11,7 +10,6 @@ class App extends Component {
     this.state = {
       currentUser: {name: ""}, // If currentUser is not defined, will be Anonymous
       messages:[], //messages and notifications
-      // notifications:[] //server notifications
     };
 
   }
