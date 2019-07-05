@@ -53,6 +53,8 @@ class App extends Component {
 
   }
 
+
+
   componentDidMount() {
 
     setTimeout(() => {
@@ -71,11 +73,13 @@ class App extends Component {
     }, 3000);
 
     const updateMessageState = (msg) => {
-
       // add a new message to the state
       const updateMsg = this.state.messages.concat(msg);
       this.setState({messages: updateMsg});
+    };
 
+    const updateUserCountState = (userCount) => {
+      this.setState({userCount: userCount});
     };
 
     // create and open the websocket
@@ -84,13 +88,16 @@ class App extends Component {
     this.socket.onopen = () => {
 
       this.setState({closed: false});
-      console.log("We're connected.");
 
       // process broadcast messages
       this.socket.onmessage = function incoming(e) {
         const msg = JSON.parse(e.data);
 
-          updateMessageState(msg); // updates browser
+          if (msg.type === "userCountChanged" ) {
+            updateUserCountState(msg.userCount);
+          } else {
+            updateMessageState(msg);
+          }
 
       };
 
@@ -103,6 +110,9 @@ class App extends Component {
       <div>
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
+            <div className="counterbar">
+            {this.state.userCount} users online
+            </div>
         </nav>
         <MessageList messages={this.state.messages} />
 

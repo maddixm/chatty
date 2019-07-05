@@ -15,7 +15,7 @@ class MessageList extends Component {
 
   //system notifications
   buildNotify = (msg) => {
-    if(msg) {
+    if(msg.user && msg.type === "incomingNotification") {
       return(
         <div className="message system" key={msg.id}>
         {msg.user.prevname} has changed their name to {msg.user.user}.
@@ -31,7 +31,6 @@ class MessageList extends Component {
       return( msg.type === "incomingMessage" ? this.buildMsg(msg) : this.buildNotify(msg));
     });
 
-    // console.log("all", messageArr);
     return(
       <main className="messages">
         {messageArr}
