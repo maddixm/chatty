@@ -26,4 +26,4 @@ A simple chat app that allows anonymous messaging.
 
 ## Final Product
 !["Screenshot of a single chat window"](https://github.com/maddixm/chatty/blob/master/client/images/one-chat.png?raw=true)
-!["Screenshot of three chat windows"](https://github.com/maddixm/chatty/blob/master/client/images/three-chats.png?raw=true)
+!["Screenshot of three chat windows"](https://github.com/maddixm/chatty/blob/master/client/images/three-chats1.png?raw=true)
