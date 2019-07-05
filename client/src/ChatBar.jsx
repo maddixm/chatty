@@ -7,15 +7,25 @@ export default class ChatBar extends Component {
 
   checkUserChange = (event) => {
 
-    // handles onblue and keydown
+    // handles onblur and keydown
     if(!event.key || event.key == "Enter") {
 
-      if(this.refs.form.chatuser.value !== this.refs.form.chatuser.defaultValue) {
-        //only update if the name changed
-        this.props.updateUser({
-          name: this.refs.form.chatuser.value,
-          prevname: (this.refs.form.chatuser.defaultValue) ? this.refs.form.chatuser.defaultValue : "Anonymous"
-        });
+      let oldName = this.refs.form.chatuser.defaultValue;
+      let newName = this.refs.form.chatuser.value;
+
+      //only update if the name changed
+      if(newName !== oldName) {
+        const msg = {
+          user: newName,
+          prevname: (oldName) ? oldName : "Anonymous"
+        };
+
+        this.props.updateUser(msg);
+        this.props.receiveNewMessage(msg); // notification
+
+        // reset the default username on the form
+        this.refs.form.chatuser.defaultValue = newName;
+
       }
 
     }

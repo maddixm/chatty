@@ -1,27 +1,40 @@
 import React, { Component } from "react";
 import Message from "./Message.jsx";
-import NotifyList from "./NotifyList.jsx";
 
 class MessageList extends Component {
   constructor() {
     super();
   }
 
+  // chat messages
+  buildMsg = (msg) => {
+    if(msg.content) {
+      return(<Message key={msg.id} username={msg.username} content={msg.content} />);
+    }
+  }
+
+  //system notifications
+  buildNotify = (msg) => {
+    if(msg) {
+      return(
+        <div className="message system" key={msg.id}>
+        {msg.user.prevname} has changed their name to {msg.user.user}.
+        </div>
+      );
+    }
+  }
+
   render() {
 
-  // build a message for each of the messages
-    const messageArr = this.props.messages.map(msg =>
-      <Message
-        key={msg.id}
-        username={msg.username}
-        content={msg.content}
-      />
-    );
+    // build message and notification elements
+    const messageArr = this.props.messages.map(msg => {
+      return( msg.type === "incomingMessage" ? this.buildMsg(msg) : this.buildNotify(msg));
+    });
 
+    // console.log("all", messageArr);
     return(
       <main className="messages">
         {messageArr}
-        <NotifyList />
       </main>
     );
   }
@@ -29,3 +42,5 @@ class MessageList extends Component {
 }
 
 export default MessageList
+
+//you are trying to sort out the message notifications here

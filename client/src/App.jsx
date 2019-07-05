@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ChatBar from "./ChatBar.jsx";
 import MessageList from "./MessageList.jsx";
-import NotifyList from "./NotifyList.jsx";
+// import NotifyList from "./NotifyList.jsx";
 
 class App extends Component {
 
@@ -10,8 +10,8 @@ class App extends Component {
     super();
     this.state = {
       currentUser: {name: ""}, // If currentUser is not defined, will be Anonymous
-      messages:[], //messages from users
-      notifications:[] //server notifications
+      messages:[], //messages and notifications
+      // notifications:[] //server notifications
     };
 
   }
@@ -61,7 +61,8 @@ class App extends Component {
       const newMessage = {
         id: 3,
         username: "Michelle",
-        content: "Hello there!"
+        content: "Hello there!",
+        type: "incomingMessage"
       };
       const messages = this.state.messages.concat(newMessage);
       // Update the state of the app component.
@@ -77,14 +78,6 @@ class App extends Component {
 
     };
 
-    const updateNotificationState = (msg) => {
-
-      // add a new notification to the state
-      const updateNotify = this.state.notifications.concat(msg);
-      this.setState({notifications: updateNotify});
-
-    };
-
     // create and open the websocket
     this.socket = new WebSocket('ws://localhost:3001'); //ws b/c http
 
@@ -97,13 +90,7 @@ class App extends Component {
       this.socket.onmessage = function incoming(e) {
         const msg = JSON.parse(e.data);
 
-        if (msg.type === "incomingMessage") {
-          // console.log(`${msg.id} User ${msg.username} said ${msg.content}`);
           updateMessageState(msg); // updates browser
-        } else if (msg.type === "incomingNotification") {
-          // console.log("changed",msg.user.prevname, msg.user.name);
-          updateNotificationState(msg);
-        }
 
       };
 
@@ -118,7 +105,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages} />
-        <NotifyList notifications={this.state.notifications} />
+
         <ChatBar
           currentUser={this.state.currentUser}
           receiveNewMessage={this.receiveNewMessage}
