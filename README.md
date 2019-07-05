@@ -25,5 +25,5 @@ A simple chat app that allows anonymous messaging.
 * [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
 
 ## Final Product
-!["Screenshot of a single chat window"](https://github.com/maddixm/tweeter/blob/master/public/images/onechat.png?raw=true)
-!["Screenshot of three chat windows"](https://github.com/maddixm/tweeter/blob/master/public/images/threechats.png?raw=true)
+!["Screenshot of a single chat window"](https://github.com/maddixm/chatty/blob/master/client/images/one-chat.png?raw=true)
+!["Screenshot of three chat windows"](https://github.com/maddixm/chatty/blob/master/client/images/three-chats.png?raw=true)
